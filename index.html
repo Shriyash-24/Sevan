@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sevaan - Devotional Productivity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --saffron: #FF9933;
+            --deep-saffron: #d97706;
+            --cream: #FFF8E7;
+            --sandalwood: #D4A574;
+            --temple-stone: #2C2416;
+            --gold: #FFD700;
+            --lotus-pink: #F4C2C2;
+            --sacred-blue: #4A5899;
+            --bg-gradient: linear-gradient(135deg, #2C2416 0%, #1a1510 50%, #0f0a06 100%);
+            --card-bg: rgba(255, 248, 231, 0.05);
+            --card-border: rgba(212, 165, 116, 0.3);
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--bg-gradient);
+            color: var(--cream);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 153, 51, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(74, 88, 153, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .app-title {
+            font-family: 'Cinzel', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--saffron), var(--gold), var(--sandalwood));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(255, 153, 51, 0.3);
+        }
+
+        .app-subtitle {
+            font-size: 1.3rem;
+            color: var(--sandalwood);
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 15px;
+            animation: fadeIn 1s ease-out 0.2s both;
+        }
+
+        .nav-tab {
+            font-family: 'Cinzel', serif;
+            background: none;
+            border: none;
+            color: var(--sandalwood);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .nav-tab:hover {
+            color: var(--saffron);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            color: var(--saffron);
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--saffron), transparent);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 153, 51, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--cream);
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .card-subtitle {
+            text-align: center;
+            color: var(--sandalwood);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .date-display {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            color: var(--sandalwood);
+            letter-spacing: 3px;
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: rgba(212, 165, 116, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.4s ease-out;
+        }
+
+        .goal-item:hover {
+            background: rgba(212, 165, 116, 0.1);
+            border-color: rgba(212, 165, 116, 0.3);
+            transform: translateX(5px);
+        }
+
+        .goal-item.completed {
+            opacity: 0.6;
+        }
+
+        .goal-item.completed .goal-text {
+            text-decoration: line-through;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--sandalwood);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .checkbox:hover {
+            border-color: var(--saffron);
+            box-shadow: 0 0 10px rgba(255, 153, 51, 0.3);
+        }
+
+        .checkbox.checked {
+            background: var(--saffron);
+            border-color: var(--saffron);
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            color: var(--temple-stone);
+            font-weight: bold;
+        }
+
+        .goal-text {
+            flex: 1;
+            font-size: 1.1rem;
+            color: var(--cream);
+        }
+
+        .goal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--sandalwood);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .icon-btn:hover {
+            color: var(--saffron);
+            background: rgba(255, 153, 51, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(212, 165, 116, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: var(--cream);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field::placeholder {
+            color: var(--sandalwood);
+            opacity: 0.6;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--saffron);
+            box-shadow: 0 0 20px rgba(255, 153, 51, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--saffron), var(--deep-saffron));
+            border: none;
+            color: var(--temple-stone);
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 153, 51, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(212, 165, 116, 0.2);
+            color: var(--cream);
+            border: 1px solid var(--sandalwood);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(212, 165, 116, 0.3);
+            border-color: var(--saffron);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(212, 165, 116, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(212, 165, 116, 0.1);
+            border-color: var(--saffron);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 153, 51, 0.2);
+        }
+
+        .stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--saffron);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--sandalwood);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .nama-japa-section {
+            text-align: center;
+        }
+
+        .deity-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .deity-btn {
+            background: rgba(212, 165, 116, 0.1);
+            border: 2px solid var(--sandalwood);
+            color: var(--cream);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .deity-btn:hover {
+            border-color: var(--saffron);
+            background: rgba(255, 153, 51, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .deity-btn.active {
+            background: var(--saffron);
+            border-color: var(--saffron);
+            color: var(--temple-stone);
+            font-weight: 600;
+        }
+
+        .japa-counter {
+            margin: 50px 0;
+        }
+
+        .counter-display {
+            font-family: 'Cinzel', serif;
+            font-size: 6rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .counter-btn {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--saffron) 0%, var(--deep-saffron) 100%);
+            border: 4px solid var(--gold);
+            color: var(--temple-stone);
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(255, 153, 51, 0.5);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .counter-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(255, 153, 51, 0.7);
+        }
+
+        .counter-btn:active {
+            transform: scale(0.98);
+        }
+
+        .japa-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .japa-stat {
+            text-align: center;
+        }
+
+        .japa-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--saffron);
+            font-weight: 600;
+        }
+
+        .japa-stat-label {
+            color: var(--sandalwood);
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .reset-btn {
+            background: rgba(244, 194, 194, 0.2);
+            border: 1px solid var(--lotus-pink);
+            color: var(--lotus-pink);
+            margin-top: 30px;
+        }
+
+        .reset-btn:hover {
+            background: rgba(244, 194, 194, 0.3);
+            border-color: var(--lotus-pink);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--sandalwood);
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scaleX(0);
+            }
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(12px, 1fr));
+            gap: 4px;
+            margin: 30px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .heatmap-cell.level-1 {
+            background: rgba(255, 153, 51, 0.2);
+        }
+
+        .heatmap-cell.level-2 {
+            background: rgba(255, 153, 51, 0.4);
+        }
+
+        .heatmap-cell.level-3 {
+            background: rgba(255, 153, 51, 0.6);
+        }
+
+        .heatmap-cell.level-4 {
+            background: var(--saffron);
+        }
+
+        .heatmap-legend {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: var(--sandalwood);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 3rem;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .counter-display {
+                font-size: 4rem;
+            }
+
+            .counter-btn {
+                width: 150px;
+                height: 150px;
+                font-size: 1.2rem;
+            }
+
+            .progress-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1 class="app-title">सेवान</h1>
+            <p class="app-subtitle">Devotional Productivity</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('today')">Today's Seva</button>
+            <button class="nav-tab" onclick="switchTab('backlog')">Backlog</button>
+            <button class="nav-tab" onclick="switchTab('progress')">Progress</button>
+            <button class="nav-tab" onclick="switchTab('japa')">Naam Japa</button>
+        </nav>
+
+        <!-- Today's Seva Tab -->
+        <div id="today" class="tab-content active">
+            <div class="card">
+                <div class="date-display" id="todayDate"></div>
+                <h2 class="card-title">Seva Arpanam</h2>
+                <p class="card-subtitle">What do you dedicate to the Divine today?</p>
+
+                <div id="todayGoals"></div>
+
+                <div class="input-group">
+                    <input type="text" 
+                           class="input-field" 
+                           id="newGoalInput" 
+                           placeholder="Describe your seva..."
+                           onkeypress="if(event.key==='Enter') addGoal()">
+                    <button class="btn" onclick="addGoal()">Add Seva</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backlog Tab -->
+        <div id="backlog" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Backlog</h2>
+                <p class="card-subtitle">Seva you plan to offer later</p>
+
+                <div class="input-group">
+                    <input type="text" 
+                           class="input-field" 
+                           id="backlogInput" 
+                           placeholder="Add future seva to backlog..."
+                           onkeypress="if(event.key==='Enter') addToBacklog()">
+                    <button class="btn" onclick="addToBacklog()">Add to Backlog</button>
+                </div>
+
+                <div id="backlogList"></div>
+            </div>
+        </div>
+
+        <!-- Progress Tab -->
+        <div id="progress" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Your Progress</h2>
+                <p class="card-subtitle">Analytics for your seva and devotion</p>
+
+                <div class="heatmap" id="heatmap"></div>
+                <div class="heatmap-legend">
+                    <span>Less</span>
+                    <div class="heatmap-cell"></div>
+                    <div class="heatmap-cell level-1"></div>
+                    <div class="heatmap-cell level-2"></div>
+                    <div class="heatmap-cell level-3"></div>
+                    <div class="heatmap-cell level-4"></div>
+                    <span>More</span>
+                </div>
+
+                <div class="progress-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeDays">0</div>
+                        <div class="stat-label">Active Days</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalGoals">0</div>
+                        <div class="stat-label">Total Seva Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgCompletion">0%</div>
+                        <div class="stat-label">Avg Daily Completion</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="perfectDays">0</div>
+                        <div class="stat-label">Perfect Days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Naam Japa Tab -->
+        <div id="japa" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">नाम जप</h2>
+                <p class="card-subtitle">Sacred Name Chanting Counter</p>
+
+                <div class="nama-japa-section">
+                    <div class="deity-selector">
+                        <button class="deity-btn active" onclick="selectDeity('Radha')">Radha</button>
+                        <button class="deity-btn" onclick="selectDeity('Ram')">Ram</button>
+                        <button class="deity-btn" onclick="selectDeity('Krishna')">Krishna</button>
+                        <button class="deity-btn" onclick="selectDeity('Sitaram')">Sitaram</button>
+                        <button class="deity-btn" onclick="selectDeity('Shiva')">Shiva</button>
+                        <button class="deity-btn" onclick="selectDeity('Others')">Others</button>
+                    </div>
+
+                    <div id="customDeityInput" style="display: none; margin-bottom: 30px;">
+                        <div class="input-group">
+                            <input type="text" 
+                                   class="input-field" 
+                                   id="customDeityName" 
+                                   placeholder="Enter your chosen divine name..."
+                                   onkeypress="if(event.key==='Enter') setCustomDeity()">
+                            <button class="btn" onclick="setCustomDeity()">Set Name</button>
+                        </div>
+                    </div>
+
+                    <div class="japa-counter">
+                        <div class="counter-display" id="japaCount">0</div>
+                        <button class="counter-btn" onclick="incrementJapa()">JAP</button>
+                    </div>
+
+                    <div class="japa-stats">
+                        <div class="japa-stat">
+                            <div class="japa-stat-value" id="todayJapa">0</div>
+                            <div class="japa-stat-label">Today</div>
+                        </div>
+                        <div class="japa-stat">
+                            <div class="japa-stat-value" id="totalJapa">0</div>
+                            <div class="japa-stat-label">Total</div>
+                        </div>
+                        <div class="japa-stat">
+                            <div class="japa-stat-value" id="currentStreak">0</div>
+                            <div class="japa-stat-label">Day Streak</div>
+                        </div>
+                    </div>
+
+                    <button class="btn reset-btn" onclick="resetJapa()">Reset Today's Count</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Naam Japa Progress</h2>
+                <div class="progress-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="japaActiveDays">0</div>
+                        <div class="stat-label">Days Practiced</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgDailyJapa">0</div>
+                        <div class="stat-label">Avg Daily Japa</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="longestStreak">0</div>
+                        <div class="stat-label">Longest Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="favoriteDeity">-</div>
+                        <div class="stat-label">Most Chanted</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let state = {
+            todayGoals: [],
+            backlog: [],
+            completionHistory: {},
+            japa: {
+                currentDeity: 'Radha',
+                todayCount: 0,
+                totalCount: 0,
+                history: {},
+                deityStats: {}
+            }
+        };
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('sevaanState');
+            if (saved) {
+                state = JSON.parse(saved);
+                // Reset today's japa count if it's a new day
+                const today = getTodayDate();
+                if (!state.japa.history[today]) {
+                    state.japa.todayCount = 0;
+                }
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('sevaanState', JSON.stringify(state));
+        }
+
+        // Get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            const today = new Date();
+            return today.toISOString().split('T')[0];
+        }
+
+        // Format date for display
+        function formatDate(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(date).toLocaleDateString('en-US', options).toUpperCase();
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+
+            // Refresh content
+            if (tabName === 'today') renderTodayGoals();
+            if (tabName === 'backlog') renderBacklog();
+            if (tabName === 'progress') updateProgress();
+            if (tabName === 'japa') updateJapaDisplay();
+        }
+
+        // Add goal to today
+        function addGoal() {
+            const input = document.getElementById('newGoalInput');
+            const text = input.value.trim();
+            if (text) {
+                state.todayGoals.push({
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    date: getTodayDate()
+                });
+                input.value = '';
+                saveState();
+                renderTodayGoals();
+            }
+        }
+
+        // Toggle goal completion
+        function toggleGoal(id) {
+            const goal = state.todayGoals.find(g => g.id === id);
+            if (goal) {
+                goal.completed = !goal.completed;
+                
+                // Update completion history
+                const today = getTodayDate();
+                if (!state.completionHistory[today]) {
+                    state.completionHistory[today] = { completed: 0, total: 0 };
+                }
+                state.completionHistory[today].total = state.todayGoals.length;
+                state.completionHistory[today].completed = state.todayGoals.filter(g => g.completed).length;
+                
+                saveState();
+                renderTodayGoals();
+            }
+        }
+
+        // Delete goal
+        function deleteGoal(id) {
+            state.todayGoals = state.todayGoals.filter(g => g.id !== id);
+            
+            // Update completion history
+            const today = getTodayDate();
+            if (state.todayGoals.length === 0) {
+                delete state.completionHistory[today];
+            } else {
+                state.completionHistory[today] = {
+                    completed: state.todayGoals.filter(g => g.completed).length,
+                    total: state.todayGoals.length
+                };
+            }
+            
+            saveState();
+            renderTodayGoals();
+        }
+
+        // Move goal to backlog
+        function moveToBacklog(id) {
+            const goal = state.todayGoals.find(g => g.id === id);
+            if (goal) {
+                state.backlog.push({
+                    id: Date.now(),
+                    text: goal.text
+                });
+                deleteGoal(id);
+            }
+        }
+
+        // Render today's goals
+        function renderTodayGoals() {
+            const container = document.getElementById('todayGoals');
+            const dateDisplay = document.getElementById('todayDate');
+            
+            dateDisplay.textContent = formatDate(new Date());
+
+            if (state.todayGoals.length === 0) {
+                container.innerHTML = '<div class="empty-state">No seva added yet. Start by adding your first offering.</div>';
+                return;
+            }
+
+            container.innerHTML = state.todayGoals.map(goal => `
+                <div class="goal-item ${goal.completed ? 'completed' : ''}">
+                    <div class="checkbox ${goal.completed ? 'checked' : ''}" onclick="toggleGoal(${goal.id})"></div>
+                    <div class="goal-text">${goal.text}</div>
+                    <div class="goal-actions">
+                        <button class="icon-btn" onclick="moveToBacklog(${goal.id})" title="Move to Backlog">📋</button>
+                        <button class="icon-btn" onclick="deleteGoal(${goal.id})" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add to backlog
+        function addToBacklog() {
+            const input = document.getElementById('backlogInput');
+            const text = input.value.trim();
+            if (text) {
+                state.backlog.push({
+                    id: Date.now(),
+                    text: text
+                });
+                input.value = '';
+                saveState();
+                renderBacklog();
+            }
+        }
+
+        // Move from backlog to today
+        function moveToToday(id) {
+            const item = state.backlog.find(b => b.id === id);
+            if (item) {
+                state.todayGoals.push({
+                    id: Date.now(),
+                    text: item.text,
+                    completed: false,
+                    date: getTodayDate()
+                });
+                state.backlog = state.backlog.filter(b => b.id !== id);
+                saveState();
+                renderBacklog();
+            }
+        }
+
+        // Delete from backlog
+        function deleteFromBacklog(id) {
+            state.backlog = state.backlog.filter(b => b.id !== id);
+            saveState();
+            renderBacklog();
+        }
+
+        // Render backlog
+        function renderBacklog() {
+            const container = document.getElementById('backlogList');
+
+            if (state.backlog.length === 0) {
+                container.innerHTML = '<div class="empty-state">No items in backlog.</div>';
+                return;
+            }
+
+            container.innerHTML = state.backlog.map(item => `
+                <div class="goal-item">
+                    <div class="goal-text">${item.text}</div>
+                    <div class="goal-actions">
+                        <button class="icon-btn" onclick="moveToToday(${item.id})" title="Move to Today">➕</button>
+                        <button class="icon-btn" onclick="deleteFromBacklog(${item.id})" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update progress statistics
+        function updateProgress() {
+            const history = state.completionHistory;
+            const dates = Object.keys(history);
+
+            // Active days
+            document.getElementById('activeDays').textContent = dates.length;
+
+            // Total goals completed
+            const totalCompleted = dates.reduce((sum, date) => sum + history[date].completed, 0);
+            document.getElementById('totalGoals').textContent = totalCompleted;
+
+            // Average completion
+            let avgCompletion = 0;
+            if (dates.length > 0) {
+                const totalPercentage = dates.reduce((sum, date) => {
+                    const percentage = history[date].total > 0 
+                        ? (history[date].completed / history[date].total) * 100 
+                        : 0;
+                    return sum + percentage;
+                }, 0);
+                avgCompletion = Math.round(totalPercentage / dates.length);
+            }
+            document.getElementById('avgCompletion').textContent = avgCompletion + '%';
+
+            // Perfect days (100% completion)
+            const perfectDays = dates.filter(date => {
+                return history[date].total > 0 && history[date].completed === history[date].total;
+            }).length;
+            document.getElementById('perfectDays').textContent = perfectDays;
+
+            // Render heatmap
+            renderHeatmap();
+        }
+
+        // Render heatmap
+        function renderHeatmap() {
+            const container = document.getElementById('heatmap');
+            const today = new Date();
+            const cells = [];
+
+            // Generate last 365 days
+            for (let i = 364; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                let level = 0;
+                if (state.completionHistory[dateStr]) {
+                    const history = state.completionHistory[dateStr];
+                    if (history.total > 0) {
+                        const percentage = (history.completed / history.total) * 100;
+                        if (percentage === 100) level = 4;
+                        else if (percentage >= 75) level = 3;
+                        else if (percentage >= 50) level = 2;
+                        else if (percentage >= 25) level = 1;
+                    }
+                }
+
+                cells.push(`<div class="heatmap-cell ${level > 0 ? 'level-' + level : ''}" title="${dateStr}"></div>`);
+            }
+
+            container.innerHTML = cells.join('');
+        }
+
+        // Select deity for Naam Japa
+        function selectDeity(deity) {
+            state.japa.currentDeity = deity;
+            
+            // Update button states
+            document.querySelectorAll('.deity-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === deity) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show/hide custom deity input
+            const customInput = document.getElementById('customDeityInput');
+            if (deity === 'Others') {
+                customInput.style.display = 'block';
+                // If there's a saved custom deity name, show it
+                if (state.japa.customDeityName) {
+                    state.japa.currentDeity = state.japa.customDeityName;
+                }
+            } else {
+                customInput.style.display = 'none';
+            }
+            
+            saveState();
+        }
+
+        // Set custom deity name
+        function setCustomDeity() {
+            const input = document.getElementById('customDeityName');
+            const name = input.value.trim();
+            if (name) {
+                state.japa.customDeityName = name;
+                state.japa.currentDeity = name;
+                
+                // Update the "Others" button to show the custom name
+                const othersBtn = Array.from(document.querySelectorAll('.deity-btn'))
+                    .find(btn => btn.textContent === 'Others' || btn.getAttribute('data-original') === 'Others');
+                if (othersBtn) {
+                    if (!othersBtn.getAttribute('data-original')) {
+                        othersBtn.setAttribute('data-original', 'Others');
+                    }
+                    othersBtn.textContent = name;
+                }
+                
+                input.value = '';
+                saveState();
+            }
+        }
+
+        // Increment Japa count
+        function incrementJapa() {
+            const today = getTodayDate();
+            
+            state.japa.todayCount++;
+            state.japa.totalCount++;
+            
+            // Update history
+            if (!state.japa.history[today]) {
+                state.japa.history[today] = 0;
+            }
+            state.japa.history[today]++;
+            
+            // Update deity stats
+            const deity = state.japa.currentDeity;
+            if (!state.japa.deityStats[deity]) {
+                state.japa.deityStats[deity] = 0;
+            }
+            state.japa.deityStats[deity]++;
+            
+            saveState();
+            updateJapaDisplay();
+
+            // Animate the counter
+            const counter = document.getElementById('japaCount');
+            counter.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                counter.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        // Reset today's japa count
+        function resetJapa() {
+            if (confirm('Are you sure you want to reset today\'s Naam Japa count?')) {
+                const today = getTodayDate();
+                const todayCount = state.japa.todayCount;
+                
+                // Subtract today's count from deity stats
+                const deity = state.japa.currentDeity;
+                if (state.japa.deityStats[deity]) {
+                    state.japa.deityStats[deity] = Math.max(0, state.japa.deityStats[deity] - todayCount);
+                }
+                
+                // Subtract from total count
+                state.japa.totalCount = Math.max(0, state.japa.totalCount - todayCount);
+                
+                // Reset today's count
+                state.japa.todayCount = 0;
+                state.japa.history[today] = 0;
+                
+                saveState();
+                updateJapaDisplay();
+            }
+        }
+
+        // Update Japa display
+        function updateJapaDisplay() {
+            document.getElementById('japaCount').textContent = state.japa.todayCount;
+            document.getElementById('todayJapa').textContent = state.japa.todayCount;
+            document.getElementById('totalJapa').textContent = state.japa.totalCount;
+
+            // Calculate streak
+            const dates = Object.keys(state.japa.history).sort().reverse();
+            let streak = 0;
+            const today = getTodayDate();
+            
+            for (let i = 0; i < dates.length; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(checkDate.getDate() - i);
+                const dateStr = checkDate.toISOString().split('T')[0];
+                
+                if (state.japa.history[dateStr] && state.japa.history[dateStr] > 0) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            document.getElementById('currentStreak').textContent = streak;
+
+            // Update Japa progress stats
+            const japaDates = Object.keys(state.japa.history).filter(date => state.japa.history[date] > 0);
+            document.getElementById('japaActiveDays').textContent = japaDates.length;
+
+            // Average daily japa
+            let avgJapa = 0;
+            if (japaDates.length > 0) {
+                const totalJapa = japaDates.reduce((sum, date) => sum + state.japa.history[date], 0);
+                avgJapa = Math.round(totalJapa / japaDates.length);
+            }
+            document.getElementById('avgDailyJapa').textContent = avgJapa;
+
+            // Longest streak
+            let longestStreak = 0;
+            let currentStreakCount = 0;
+            const allDates = Object.keys(state.japa.history).sort();
+            
+            for (let i = 0; i < allDates.length; i++) {
+                if (state.japa.history[allDates[i]] > 0) {
+                    currentStreakCount++;
+                    longestStreak = Math.max(longestStreak, currentStreakCount);
+                } else {
+                    currentStreakCount = 0;
+                }
+            }
+            document.getElementById('longestStreak').textContent = longestStreak;
+
+            // Favorite deity
+            let favoriteDeity = '-';
+            if (Object.keys(state.japa.deityStats).length > 0) {
+                favoriteDeity = Object.keys(state.japa.deityStats).reduce((a, b) => 
+                    state.japa.deityStats[a] > state.japa.deityStats[b] ? a : b
+                );
+            }
+            document.getElementById('favoriteDeity').textContent = favoriteDeity;
+        }
+
+        // Initialize app
+        function init() {
+            loadState();
+            
+            // Check if it's a new day and reset today's japa count
+            const today = getTodayDate();
+            const lastDate = Object.keys(state.japa.history).sort().pop();
+            if (lastDate !== today) {
+                state.japa.todayCount = 0;
+            }
+            
+            // Restore custom deity name if it exists
+            if (state.japa.customDeityName) {
+                const othersBtn = Array.from(document.querySelectorAll('.deity-btn'))
+                    .find(btn => btn.textContent === 'Others');
+                if (othersBtn) {
+                    othersBtn.setAttribute('data-original', 'Others');
+                    othersBtn.textContent = state.japa.customDeityName;
+                    
+                    // If Others/custom deity was the selected one, show the input and update button
+                    if (state.japa.currentDeity === state.japa.customDeityName || state.japa.currentDeity === 'Others') {
+                        othersBtn.classList.add('active');
+                        document.getElementById('customDeityInput').style.display = 'block';
+                    }
+                }
+            }
+            
+            renderTodayGoals();
+            updateJapaDisplay();
+        }
+
+        // Run initialization
+        init();
+    </script>
+</body>
+</html>
