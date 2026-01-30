@@ -58,38 +58,34 @@
         }
 
         .app-header {
-            text-align: center;
-            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--card-border);
             animation: fadeInDown 0.8s ease-out;
         }
 
         .app-title {
             font-family: 'Cinzel', serif;
-            font-size: 4.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--saffron), var(--gold), var(--sandalwood));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 10px;
-            letter-spacing: 4px;
-            text-shadow: 0 0 30px rgba(255, 153, 51, 0.3);
+            letter-spacing: 2px;
+            margin: 0;
         }
 
         .app-subtitle {
-            font-size: 1.3rem;
-            color: var(--sandalwood);
-            letter-spacing: 2px;
-            font-weight: 300;
+            display: none;
         }
 
         .nav-tabs {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 15px;
+            gap: 15px;
             animation: fadeIn 1s ease-out 0.2s both;
         }
 
@@ -98,17 +94,17 @@
             background: none;
             border: none;
             color: var(--sandalwood);
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             cursor: pointer;
-            padding: 10px 20px;
+            padding: 8px 16px;
             position: relative;
             transition: all 0.3s ease;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
 
         .nav-tab:hover {
             color: var(--saffron);
-            transform: translateY(-2px);
         }
 
         .nav-tab.active {
@@ -118,11 +114,11 @@
         .nav-tab.active::after {
             content: '';
             position: absolute;
-            bottom: -16px;
+            bottom: -21px;
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--saffron), transparent);
+            background: var(--saffron);
             animation: slideIn 0.3s ease-out;
         }
 
@@ -139,8 +135,8 @@
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
+            padding: 30px;
+            margin-bottom: 25px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             animation: fadeInUp 0.6s ease-out;
@@ -161,8 +157,8 @@
 
         .card-title {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            margin-bottom: 15px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
             color: var(--cream);
             text-align: center;
             letter-spacing: 2px;
@@ -171,8 +167,8 @@
         .card-subtitle {
             text-align: center;
             color: var(--sandalwood);
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-size: 1rem;
         }
 
         .date-display {
@@ -374,8 +370,8 @@
         .deity-selector {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
+            gap: 10px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
@@ -383,10 +379,10 @@
             background: rgba(212, 165, 116, 0.1);
             border: 2px solid var(--sandalwood);
             color: var(--cream);
-            padding: 12px 25px;
-            border-radius: 25px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 1px;
@@ -406,37 +402,36 @@
         }
 
         .japa-counter {
-            margin: 50px 0;
+            margin: 30px 0 25px 0;
         }
 
         .counter-display {
             font-family: 'Cinzel', serif;
-            font-size: 6rem;
+            font-size: 4rem;
             color: var(--gold);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            animation: pulse 2s ease-in-out infinite;
         }
 
         .counter-btn {
-            width: 200px;
-            height: 200px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--saffron) 0%, var(--deep-saffron) 100%);
-            border: 4px solid var(--gold);
+            border: 3px solid var(--gold);
             color: var(--temple-stone);
             font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 40px rgba(255, 153, 51, 0.5);
+            box-shadow: 0 8px 30px rgba(255, 153, 51, 0.5);
             font-weight: 700;
             letter-spacing: 2px;
         }
 
         .counter-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 15px 50px rgba(255, 153, 51, 0.7);
+            box-shadow: 0 12px 40px rgba(255, 153, 51, 0.7);
         }
 
         .counter-btn:active {
@@ -446,8 +441,8 @@
         .japa-stats {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            margin-top: 40px;
+            gap: 30px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
@@ -457,22 +452,25 @@
 
         .japa-stat-value {
             font-family: 'Cinzel', serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--saffron);
             font-weight: 600;
         }
 
         .japa-stat-label {
             color: var(--sandalwood);
-            margin-top: 5px;
+            margin-top: 3px;
             letter-spacing: 1px;
+            font-size: 0.9rem;
         }
 
         .reset-btn {
             background: rgba(244, 194, 194, 0.2);
             border: 1px solid var(--lotus-pink);
             color: var(--lotus-pink);
-            margin-top: 30px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
         }
 
         .reset-btn:hover {
@@ -592,31 +590,52 @@
         }
 
         @media (max-width: 768px) {
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
             .app-title {
-                font-size: 3rem;
+                font-size: 1.5rem;
             }
 
             .nav-tabs {
-                flex-direction: column;
-                gap: 10px;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-tab {
+                font-size: 0.85rem;
+                padding: 6px 12px;
             }
 
             .card {
-                padding: 25px;
+                padding: 20px;
             }
 
             .counter-display {
-                font-size: 4rem;
+                font-size: 3rem;
             }
 
             .counter-btn {
-                width: 150px;
-                height: 150px;
-                font-size: 1.2rem;
+                width: 120px;
+                height: 120px;
+                font-size: 1.1rem;
             }
 
             .progress-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+
+            .japa-stat-value {
+                font-size: 1.5rem;
+            }
+
+            .deity-btn {
+                font-size: 0.75rem;
+                padding: 6px 12px;
             }
         }
     </style>
@@ -625,15 +644,13 @@
     <div class="container">
         <header class="app-header">
             <h1 class="app-title">सेवान</h1>
-            <p class="app-subtitle">Devotional Productivity</p>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('today')">Today</button>
+                <button class="nav-tab" onclick="switchTab('backlog')">Backlog</button>
+                <button class="nav-tab" onclick="switchTab('progress')">Progress</button>
+                <button class="nav-tab" onclick="switchTab('japa')">Naam Japa</button>
+            </nav>
         </header>
-
-        <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('today')">Today's Seva</button>
-            <button class="nav-tab" onclick="switchTab('backlog')">Backlog</button>
-            <button class="nav-tab" onclick="switchTab('progress')">Progress</button>
-            <button class="nav-tab" onclick="switchTab('japa')">Naam Japa</button>
-        </nav>
 
         <!-- Today's Seva Tab -->
         <div id="today" class="tab-content active">
@@ -728,7 +745,7 @@
                         <button class="deity-btn" onclick="selectDeity('Others')">Others</button>
                     </div>
 
-                    <div id="customDeityInput" style="display: none; margin-bottom: 30px;">
+                    <div id="customDeityInput" style="display: none; margin-bottom: 20px;">
                         <div class="input-group">
                             <input type="text" 
                                    class="input-field" 
@@ -755,16 +772,15 @@
                         </div>
                         <div class="japa-stat">
                             <div class="japa-stat-value" id="currentStreak">0</div>
-                            <div class="japa-stat-label">Day Streak</div>
+                            <div class="japa-stat-label">Streak</div>
                         </div>
                     </div>
 
                     <button class="btn reset-btn" onclick="resetJapa()">Reset Today's Count</button>
                 </div>
-            </div>
 
-            <div class="card">
-                <h2 class="card-title">Naam Japa Progress</h2>
+                <hr style="border: none; border-top: 1px solid var(--card-border); margin: 30px 0;">
+
                 <div class="progress-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="japaActiveDays">0</div>
@@ -772,11 +788,11 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="avgDailyJapa">0</div>
-                        <div class="stat-label">Avg Daily Japa</div>
+                        <div class="stat-label">Avg Daily</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="longestStreak">0</div>
-                        <div class="stat-label">Longest Streak</div>
+                        <div class="stat-label">Best Streak</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="favoriteDeity">-</div>
